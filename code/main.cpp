@@ -11,9 +11,9 @@ using namespace std;
 
 void print(vector<double> &agent,int n) {
   ofstream ofile;
-  ofile.open("107transactions.txt");//,ios::out | ios::binary);
+  ofile.open("104transactions.txt");//,ios::out | ios::binary);
   for(int i = 0; i<agent.size(); i++) { 
-   ofile<<agent[i]/n<<endl; // del på mc cycles
+    ofile<<agent[i]<<" "<<agent[i]/n<<endl; // del på mc cycles
   }
   ofile.close();
 }
@@ -24,7 +24,7 @@ int main(int argc,char**argv) {
   /* number of mc cycles */
   int n_cycles = 10000;//10^4
   int N = 500; //agents
-  int ntrans = 10000000;//10^7
+  int ntrans = 10000;//10^7
   double m0 = 1000; //init money
   vector<int> transaction_count(N);
   vector<double> avg_money(N);
@@ -42,9 +42,10 @@ int main(int argc,char**argv) {
 
   /* progression */
   int percent = 0;
+  int total_percent = n_cycles/100;
   /* loop mc cycles */
   for(int k = 0; k<=n_cycles; k++) {
-        if(k%100 == 0) {
+        if(k%total_percent == 0) {
 	  cout<<" [Processing "<<percent++<<"%]\r";
       cout.flush();
     }
