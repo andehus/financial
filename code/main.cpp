@@ -11,7 +11,7 @@ using namespace std;
 
 void print(vector<double> &agent,int n) {
   ofstream ofile;
-  ofile.open("1000transactions.txt");//,ios::out | ios::binary);
+  ofile.open("107transactions.txt");//,ios::out | ios::binary);
   for(int i = 0; i<agent.size(); i++) { 
    ofile<<agent[i]/n<<endl; // del på mc cycles
   }
@@ -24,7 +24,7 @@ int main(int argc,char**argv) {
   /* number of mc cycles */
   int n_cycles = 10000;//10^4
   int N = 500; //agents
-  int ntrans = 1000;//10^7
+  int ntrans = 10000000;//10^7
   double m0 = 1000; //init money
   vector<int> transaction_count(N);
   vector<double> avg_money(N);
@@ -40,8 +40,15 @@ int main(int argc,char**argv) {
   mt19937_64 gen(rd());
   uniform_real_distribution<double>RandomNumberGenerator(0.0,1.0);
 
+  /* progression */
+  int percent = 0;
   /* loop mc cycles */
   for(int k = 0; k<=n_cycles; k++) {
+        if(k%100 == 0) {
+	  cout<<" [Processing "<<percent++<<"%]\r";
+      cout.flush();
+    }
+    
     for(int t = 0; t<=ntrans; t++){ 
       int i =  (int)(RandomNumberGenerator(gen)*N);
       int j =  (int)(RandomNumberGenerator(gen)*N);
@@ -58,13 +65,14 @@ int main(int argc,char**argv) {
     //average_money += current_money;
     
   }//end mc
+  cout<<endl;
   double sum = 0.0;
   for(int i = 0; i<agent.size(); i++)
     sum += agent[i];
   double avg_m = sum/agent.size();
-  cout<<avg_m<<endl;
+  cout<<"Average money: "<<avg_m<<endl;
   print(agent,n_cycles);
   stop = clock();
-  cout<<"Time: "<<((double)(stop-start/CLOCKS_PER_SEC))<<endl;
+  cout<<"Time: "<<((double)(stop-start)/CLOCKS_PER_SEC)<<endl;
   return 0;
 }
